@@ -30,8 +30,21 @@ ActiveAdmin.register_page "Dashboard" do
             panel "Recent Health Entries" do
                 ul do
                     HealthEntry.last(10).map do |e|
-                        entry_label = "#{e.user}: W:#{e.weight} BF:#{e.bodyfat} MM:#{e.muscle_mass} HR:#{e.heartrate}"
+                        entry_label = "#{e.user}: W: #{e.weight} BF: #{e.bodyfat} MM: #{e.muscle_mass} HR: #{e.heartrate}"
                         li link_to(entry_label, admin_user_path(e.user))
+                    end
+                end
+            end
+        end
+    end
+
+    columns do
+        column do
+            panel "Recent Dosage Responses" do
+                ul do
+                    DosageResponse.last(10).map do |r|
+                        li link_to(r, admin_dosage_response_path(r))
+
                     end
                 end
             end
