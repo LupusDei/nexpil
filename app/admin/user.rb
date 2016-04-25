@@ -1,4 +1,5 @@
 ActiveAdmin.register User do
+  menu priority: 2, label: "Users"
   permit_params :first_name, :last_name, :email, :age,
     :gender, :comorbid_conditions,
      perscriptions_attributes: [:id, :medicine, :dosage, :user_id, :_destroy],
@@ -17,6 +18,12 @@ ActiveAdmin.register User do
     column :created_at
     actions
   end
+
+  filter :first_name
+  filter :last_name
+  filter :email
+  filter :created_at
+
   show do |user|
     attributes_table do
       row :id
@@ -49,13 +56,8 @@ ActiveAdmin.register User do
     end
   end
 
-  filter :first_name
-  filter :last_name
-  filter :email
-  filter :created_at
-
   form do |f|
-    f.inputs "Admin Details" do
+    f.inputs "User Details" do
       f.input :first_name
       f.input :last_name
       f.input :email

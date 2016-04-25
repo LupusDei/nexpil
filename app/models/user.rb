@@ -6,6 +6,6 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :health_entries, allow_destroy: true
 
   def to_s
-    self.last_name + ", " + self.first_name
+    self.first_name + " " + self.last_name
   end
 end
