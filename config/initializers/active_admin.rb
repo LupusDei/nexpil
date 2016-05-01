@@ -43,13 +43,12 @@ ActiveAdmin.setup do |config|
   #     admin.site_title = "Custom Admin Title"
   #   end
 
-  config.namespace :physician do |physician|
-      physician.site_title = "Physician Portal"
-      physician.authentication_method = :authenticate_physician_user!
-      physician.current_user_method = :current_physician_user
-      physician.logout_link_path = :destroy_physician_user_session_path
-
-    end
+  # config.namespace :physician do |physician|
+  #     physician.site_title = "Physician Portal"
+  #     physician.authentication_method = :authenticate_physician!
+  #     physician.current_user_method = :current_physician
+  #     physician.logout_link_path = :destroy_physician_session_path
+  #   end
   #
   # This will ONLY change the title for the admin section. Other
   # namespaces will continue to use the main "site_title" configuration.

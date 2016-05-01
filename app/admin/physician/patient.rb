@@ -1,5 +1,5 @@
 ActiveAdmin.register User, namespace: Physician do
-  menu priority: 1, label: "Patient"
+  menu priority: 1, label: "Patients"
   config.comments = false
   index do
       selectable_column
