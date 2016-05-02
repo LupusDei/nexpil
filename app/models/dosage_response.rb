@@ -1,8 +1,8 @@
 class DosageResponse < ApplicationRecord
-  belongs_to :user
+  belongs_to :patient
   belongs_to :physician
 
   def to_s
-    "#{self.physician} -> #{self.user} ~~  #{self.medicine} @ #{self.dosage}"
+    "#{self.physician} -> #{self.patient} ~~  #{self.medicine} @ #{self.dosage}"
   end
 end

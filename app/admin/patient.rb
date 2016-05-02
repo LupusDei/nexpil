@@ -1,4 +1,4 @@
-ActiveAdmin.register Patient, namespace: :portal do
+ActiveAdmin.register Patient do
   menu priority: 1, label: "Patients"
   permit_params :first_name, :last_name, :email,
                :age, :gender, :medical_history

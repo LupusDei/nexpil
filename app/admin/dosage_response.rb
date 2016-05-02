@@ -1,13 +1,13 @@
 ActiveAdmin.register DosageResponse do
   menu priority: 4, label: "Dosage Responses"
 
-  permit_params :medicine, :dosage, :user_id, :physician_id
+  permit_params :medicine, :dosage, :patient_id, :physician_id
 
   index do
     selectable_column
     id_column
     column :physician
-    column :user
+    column :patient
     column :medicine
     column :dosage
 
@@ -16,13 +16,13 @@ ActiveAdmin.register DosageResponse do
   end
 
   filter :physician
-  filter :user
+  filter :patient
 
   show do |r|
     attributes_table do
       row :id
       row :physician
-      row :user
+      row :patient
       row :medicine
       row :dosage
 
@@ -33,7 +33,7 @@ ActiveAdmin.register DosageResponse do
 
   form do |f|
     f.inputs "Dosage Response Details" do
-      f.input :user
+      f.input :patient
       f.input :physician
       f.input :medicine
       f.input :dosage

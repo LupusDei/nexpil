@@ -1,26 +1,26 @@
 ActiveAdmin.register Perscription do
-  belongs_to :user
-  permit_params :medicine, :dosage, :user
+  belongs_to :patient
+  permit_params :medicine, :dosage, :patient
 
   index do
     selectable_column
     id_column
     column :medicine
     column :dosage
-    column :user
+    column :patient
 
     column :created_at
     actions
   end
 
-  filter :user
+  filter :patient
   filter :created_at
 
   form do |f|
     f.inputs "Perscription" do
       f.input :medicine
       f.input :dosage
-      f.input :user  #this will explode eventually when there are hundreds/thousands of users
+      f.input :patient  #this will explode eventually when there are hundreds/thousands of patients
 
     end
     f.actions

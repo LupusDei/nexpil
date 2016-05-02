@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501215632) do
+ActiveRecord::Schema.define(version: 20160501221430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,14 +52,14 @@ ActiveRecord::Schema.define(version: 20160501215632) do
   create_table "dosage_responses", force: :cascade do |t|
     t.string   "dosage"
     t.string   "medicine"
-    t.integer  "user_id"
     t.integer  "physician_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "patient_id"
   end
 
+  add_index "dosage_responses", ["patient_id"], name: "index_dosage_responses_on_patient_id", using: :btree
   add_index "dosage_responses", ["physician_id"], name: "index_dosage_responses_on_physician_id", using: :btree
-  add_index "dosage_responses", ["user_id"], name: "index_dosage_responses_on_user_id", using: :btree
 
   create_table "health_entries", force: :cascade do |t|
     t.decimal  "weight",      precision: 5, scale: 2, null: false
@@ -68,20 +68,31 @@ ActiveRecord::Schema.define(version: 20160501215632) do
     t.decimal  "heartrate",   precision: 3, scale: 1, null: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.integer  "user_id"
+    t.integer  "patient_id"
   end
 
-  add_index "health_entries", ["user_id"], name: "index_health_entries_on_user_id", using: :btree
+  add_index "health_entries", ["patient_id"], name: "index_health_entries_on_patient_id", using: :btree
+
+  create_table "patients", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.integer  "age"
+    t.string   "gender"
+    t.text     "medical_history"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "perscriptions", force: :cascade do |t|
-    t.integer  "user_id"
     t.string   "medicine"
     t.string   "dosage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "patient_id"
   end
 
-  add_index "perscriptions", ["user_id"], name: "index_perscriptions_on_user_id", using: :btree
+  add_index "perscriptions", ["patient_id"], name: "index_perscriptions_on_patient_id", using: :btree
 
   create_table "physicians", force: :cascade do |t|
     t.string   "first_name"
@@ -115,8 +126,8 @@ ActiveRecord::Schema.define(version: 20160501215632) do
     t.datetime "updated_at",          null: false
   end
 
+  add_foreign_key "dosage_responses", "patients"
   add_foreign_key "dosage_responses", "physicians"
-  add_foreign_key "dosage_responses", "users"
-  add_foreign_key "health_entries", "users"
-  add_foreign_key "perscriptions", "users"
+  add_foreign_key "health_entries", "patients"
+  add_foreign_key "perscriptions", "patients"
 end

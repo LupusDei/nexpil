@@ -6,10 +6,10 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
         column do
-            panel "New Users" do
+            panel "New Patients" do
                 ul do
-                    User.last(5).map do |user|
-                        li link_to(user.to_s, admin_user_path(user))
+                    Patient.last(5).map do |patient|
+                        li link_to(patient.to_s, admin_patient_path(patient))
                     end
                 end
             end
@@ -30,8 +30,8 @@ ActiveAdmin.register_page "Dashboard" do
             panel "Recent Health Entries" do
                 ul do
                     HealthEntry.last(10).map do |e|
-                        entry_label = "#{e.user}: W: #{e.weight} BF: #{e.bodyfat} MM: #{e.muscle_mass} HR: #{e.heartrate}"
-                        li link_to(entry_label, admin_user_path(e.user))
+                        entry_label = "#{e.patient}: W: #{e.weight} BF: #{e.bodyfat} MM: #{e.muscle_mass} HR: #{e.heartrate}"
+                        li link_to(entry_label, admin_patient_path(e.patient))
                     end
                 end
             end
