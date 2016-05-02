@@ -18,7 +18,6 @@ ActiveAdmin.register Patient do
 
     column :created_at
 
-    column current_physician.first_name
     actions
   end
 

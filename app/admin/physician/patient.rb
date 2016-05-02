@@ -22,6 +22,16 @@ ActiveAdmin.register Patient, namespace: :portal do
   end
 
   show title: proc {|p| p.to_s} do |patient|
+    panel "Health Entries" do
+      table_for(patient.health_entries) do
+        column("Date Added") {|e| e.created_at}
+        column("Weight") {|e| e.weight}
+        column("Body Fat") {|e| e.bodyfat}
+        column("Muscle Mass") {|e| e.muscle_mass}
+        column("Heart Rate") {|e| e.heartrate}
+      end
+    end
+
     attributes_table do
       row :first_name
       row :last_name
@@ -38,16 +48,6 @@ ActiveAdmin.register Patient, namespace: :portal do
       table_for(patient.perscriptions) do
         column("Medicine") {|p| p.medicine}
         column("Dosage") {|p| p.dosage}
-      end
-    end
-
-    panel "Health Entries" do
-      table_for(patient.health_entries) do
-        column("Date Added") {|e| e.created_at}
-        column("Weight") {|e| e.weight}
-        column("Body Fat") {|e| e.bodyfat}
-        column("Muscle Mass") {|e| e.muscle_mass}
-        column("Heart Rate") {|e| e.heartrate}
       end
     end
   end

@@ -1,5 +1,5 @@
 ActiveAdmin.register DosageResponse, namespace: :portal do
-  menu priority: 1, label: "Dosage Responses"
+  menu priority: 1, label: "Dosage Updates"
 
   config.comments = false
 
@@ -12,7 +12,7 @@ ActiveAdmin.register DosageResponse, namespace: :portal do
     end
   end
 
-  index do
+  index title: "Dosage Updates" do
     selectable_column
     id_column
     column :physician
