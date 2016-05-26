@@ -1,5 +1,5 @@
 ActiveAdmin.register Patient, namespace: :portal do
-  menu priority: 2, label: "Patients"
+  menu priority: 3, label: "Patients"
 
   config.comments = false
 

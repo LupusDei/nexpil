@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502122141) do
+ActiveRecord::Schema.define(version: 20160512182121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,15 +62,17 @@ ActiveRecord::Schema.define(version: 20160502122141) do
   add_index "dosage_responses", ["physician_id"], name: "index_dosage_responses_on_physician_id", using: :btree
 
   create_table "health_entries", force: :cascade do |t|
-    t.decimal  "weight",      precision: 5, scale: 2, null: false
-    t.decimal  "bodyfat",     precision: 4, scale: 2, null: false
-    t.decimal  "muscle_mass", precision: 5, scale: 2, null: false
-    t.decimal  "heartrate",   precision: 3, scale: 1, null: false
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.decimal  "weight",             precision: 5, scale: 2, null: false
+    t.decimal  "bodyfat",            precision: 4, scale: 2, null: false
+    t.decimal  "muscle_mass",        precision: 5, scale: 2, null: false
+    t.decimal  "heartrate",          precision: 3, scale: 1, null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.integer  "patient_id"
+    t.integer  "dosage_response_id"
   end
 
+  add_index "health_entries", ["dosage_response_id"], name: "index_health_entries_on_dosage_response_id", using: :btree
   add_index "health_entries", ["patient_id"], name: "index_health_entries_on_patient_id", using: :btree
 
   create_table "patients", force: :cascade do |t|
@@ -117,6 +119,7 @@ ActiveRecord::Schema.define(version: 20160502122141) do
 
   add_foreign_key "dosage_responses", "patients"
   add_foreign_key "dosage_responses", "physicians"
+  add_foreign_key "health_entries", "dosage_responses"
   add_foreign_key "health_entries", "patients"
   add_foreign_key "perscriptions", "patients"
 end

@@ -1,9 +1,9 @@
 ActiveAdmin.register DosageResponse, namespace: :portal do
-  menu priority: 1, label: "Dosage Updates"
+  menu priority: 2, label: "Dosage Updates"
 
   config.comments = false
 
-
+  actions :all, :except => [:new, :destroy]
   permit_params :medicine, :dosage, :patient_id, :physician_id
 
   controller do
@@ -15,8 +15,9 @@ ActiveAdmin.register DosageResponse, namespace: :portal do
   index title: "Dosage Updates" do
     selectable_column
     id_column
-    column :physician
-    column :patient
+    column '' do |patient|
+      text_node link_to(patient.to_s, portal_patient_path(patient))
+    end
     column :medicine
     column :dosage
 

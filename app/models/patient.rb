@@ -9,4 +9,8 @@ class Patient < ApplicationRecord
   def to_s
     self.last_name + ", " + self.first_name
   end
+
+  def name
+    to_s
+  end
 end
