@@ -37,8 +37,6 @@ dump.rdb
 .tags*
 .gemtags
 
-# Ignore application configuration
-/config/application.yml
 #ignore public files
 /public/files/
 

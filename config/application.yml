@@ -1,0 +1,6 @@
+withings_api_key: somefakekey
+withings_api_secret: anotherfakesecret
+
+twilio_api_key: fakekey
+twilio_secret_key: fakesecret
+twilio_phone_number: "+12345678900"
