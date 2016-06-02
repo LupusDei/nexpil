@@ -8,7 +8,7 @@ bob:
   first_name: "Bob"
   last_name: "Dole"
   email: "bob@dole.com"
-  # phone: "1234567899"
+  phone_number: "1234567899"
   age: 79
   gender: "Male"
   medical_history: "Problematic Liver.  Alergic to cats."
@@ -17,7 +17,7 @@ larry:
   first_name: "Larry"
   last_name: "Niven"
   email: "larry@niven.com"
-  # phone: "1234567899"
+  phone_number: "1234567899"
   age: 60
   gender: "Male"
   medical_history: "Severe heart disease.  Insatiable sense of humor."

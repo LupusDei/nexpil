@@ -12,6 +12,7 @@ ActiveAdmin.register Patient do
     column :first_name
     column :last_name
     column :email
+    column :phone_number
     column :age
     column :gender
     column :medical_history
@@ -26,6 +27,7 @@ ActiveAdmin.register Patient do
       row :first_name
       row :last_name
       row :email
+      row :phone_number
       row :age
       row :gender
       row :medical_history
@@ -57,6 +59,7 @@ ActiveAdmin.register Patient do
       f.input :first_name
       f.input :last_name
       f.input :email
+      f.input :phone_number
       f.input :age
       f.input :gender
       f.input :medical_history

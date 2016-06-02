@@ -4,6 +4,7 @@ class PhoneService
     auth_token = SECRET_KEYS["twilio_secret_key"]
     account_sid = SECRET_KEYS["twilio_api_key"]
     saved_number = SECRET_KEYS["twilio_phone_number"]
+    to_number = "+1" + to_number
 
     begin
       client = Twilio::REST::Client.new account_sid, auth_token
