@@ -8,15 +8,23 @@ class HealthEntry < ApplicationRecord
   attr_accessor :phone_service
 
 
+  def self.most_recent
+    joins("INNER JOIN (SELECT patient_id, MAX(recorded_at) AS recent_date
+      FROM health_entries
+      GROUP BY patient_id
+      ) AS recent ON health_entries.patient_id = recent.patient_id
+      AND health_entries.recorded_at = recent.recent_date")
+  end
+
   def self.pending
     joins("LEFT OUTER JOIN dosage_responses ON dosage_responses.health_entry_id = health_entries.id")
-      .where("dosage_responses.id IS NULL")
+      .where("dosage_responses.id IS NULL").most_recent
   end
 
   def self.new_entries_for_physician(physician)
       joins("INNER JOIN dosage_responses as drs ON drs.patient_id = health_entries.patient_id").
       pending.
-      where("drs.physician_id = ?", physician.id)
+      where("drs.physician_id = ?", physician.id).distinct(&:id)
   end
 
 
