@@ -27,7 +27,7 @@ ActiveAdmin.register HealthEntry, namespace: :portal do
     column :muscle_mass
     column :heartrate
 
-    column :created_at
+    column :recorded_at
 
     column '' do |entry|
       text_node link_to("Respond", portal_health_entry_path(entry))
@@ -92,9 +92,8 @@ ActiveAdmin.register HealthEntry, namespace: :portal do
   member_action :respond, method: :post do
     entry = HealthEntry.find(params[:id])
     dr_params = params[:dosage_response].permit(:medicine, :dosage)
-    dr = DosageResponse.create(dr_params.merge(physician_id: current_physician.id, patient_id: entry.patient_id))
-    entry.dosage_response = dr
-    entry.save
+    dr = DosageResponse.create(dr_params.merge(physician_id: current_physician.id,
+     patient_id: entry.patient_id, health_entry_id: entry.id))
     redirect_to(portal_health_entry_path(entry), {notice: "Responded with new dosage!"})
   end
 

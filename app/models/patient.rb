@@ -1,6 +1,6 @@
 class Patient < ApplicationRecord
   has_many :perscriptions
-  has_many :health_entries
+  has_many :health_entries, -> { order(recorded_at: :desc) }
   has_many :dosage_responses
 
   accepts_nested_attributes_for :perscriptions, allow_destroy: true
@@ -12,5 +12,9 @@ class Patient < ApplicationRecord
 
   def name
     to_s
+  end
+
+  def most_recent_health_entry
+    health_entries.first
   end
 end

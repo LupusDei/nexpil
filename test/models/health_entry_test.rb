@@ -13,9 +13,8 @@ class HealthEntryTest < ActiveSupport::TestCase
     assert @entry == entries.first
 
     physician = physicians(:house)
-    response = DosageResponse.create(patient: @patient, physician: physician, medicine: "Lorax", dosage: "One a day")
-    @entry.dosage_response = response
-    @entry.save
+    response = DosageResponse.create(patient: @patient, physician: physician,
+     medicine: "Lorax", dosage: "One a day", health_entry_id: @entry.id)
 
     assert entries.reload.count == 0
   end
@@ -26,16 +25,15 @@ class HealthEntryTest < ActiveSupport::TestCase
     entries = HealthEntry.new_entries_for_physician(physician)
     assert entries.count == 0
 
-    response = DosageResponse.create(patient: @patient, physician: physician, medicine: "Lorax", dosage: "One a day")
-    @entry.dosage_response = response
-    @entry.save
+    response = DosageResponse.create(patient: @patient, physician: physician,
+         medicine: "Lorax", dosage: "One a day", health_entry_id: @entry.id)
 
     assert entries.reload.count == 0
 
     new_entry = HealthEntry.create(patient: @patient, weight: 175, bodyfat: 13, muscle_mass:105, heartrate: 75)
 
-    assert entries.reload.count == 1
-    assert new_entry == entries.first
+    assert_equal 1, entries.reload.count
+    assert_equal new_entry, entries.first
   end
 
 ##############  Actions  ##################
@@ -56,7 +54,8 @@ end
 
 test "it can respond to the patient with a new dosage" do
   physician = physicians(:house)
-  response = DosageResponse.create(patient: @patient, physician: physician, medicine: "Lorax", dosage: "One a day")
+  response = DosageResponse.create(patient: @patient, physician: physician,
+       medicine: "Lorax", dosage: "One a day", health_entry_id: @entry.id)
   @entry.respond_with_dosage(response)
 
   service = @entry.phone_service

@@ -1,18 +1,21 @@
 class HealthEntry < ApplicationRecord
   belongs_to :patient
-  belongs_to :dosage_response
+  has_many :dosage_responses
 
+  validates_uniqueness_of :foreign_key
+  validates_presence_of :weight, :bodyfat, :heartrate, :muscle_mass
   attr_accessor :phone_service
 
 
   def self.pending
-    where(dosage_response_id: nil)
+    joins("LEFT OUTER JOIN dosage_responses ON dosage_responses.health_entry_id = health_entries.id")
+      .where("dosage_responses.id IS NULL")
   end
 
   def self.new_entries_for_physician(physician)
-      joins("INNER JOIN dosage_responses ON dosage_responses.patient_id = health_entries.patient_id").
+      joins("INNER JOIN dosage_responses as drs ON drs.patient_id = health_entries.patient_id").
       pending.
-      where("dosage_responses.physician_id = ?", physician.id)
+      where("drs.physician_id = ?", physician.id)
   end
 
   def respond_with_dosage(dosage_response)
@@ -21,7 +24,8 @@ class HealthEntry < ApplicationRecord
   end
 
   def previous
-    @previous ||= HealthEntry.where(patient: patient).where("created_at < ?", self.created_at).last
+    @previous ||= HealthEntry.where(patient: patient)
+      .where("created_at < ?", self.created_at).last
   end
 
   def phone_service

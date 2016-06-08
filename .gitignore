@@ -15,6 +15,7 @@ secret.yml
 .byebug_history
 
 /config/database.yml
+/config/secrets.yml
 # Ignore the default SQLite database.
 /db/*.sqlite3
 

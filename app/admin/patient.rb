@@ -6,6 +6,14 @@ ActiveAdmin.register Patient do
   perscriptions_attributes: [:id, :medicine, :dosage, :patient_id, :_destroy],
   health_entries_attributes: [:id, :weight, :bodyfat, :muscle_mass, :heartrate, :patient_id, :_destroy]
   config.comments = false
+
+  controller do
+    def withings_client(options = {})
+      WithingsSDK::Client.new({consumer_key: Rails.application.secrets.withings_api_key,
+             consumer_secret: Rails.application.secrets.withings_api_secret}.merge(options))
+    end
+  end
+
   index do
     selectable_column
     id_column
@@ -31,6 +39,13 @@ ActiveAdmin.register Patient do
       row :age
       row :gender
       row :medical_history
+      row 'Withings' do |patient|
+        if patient.withings_user_id != nil
+          text_node "Connected!"
+        else
+          text_node link_to("Connect to Withings", link_to_withings_admin_patient_path(patient))
+        end
+      end
 
       row :created_at
       row :updated_at
@@ -44,12 +59,15 @@ ActiveAdmin.register Patient do
     end
 
     panel "Health Entries" do
+      text_node link_to "Refresh Entries", refresh_withings_entries_admin_patient_path(patient)
       table_for(patient.health_entries) do
         column("Date Added") {|e| e.created_at}
+        column("Date Recorded") {|e| e.recorded_at}
         column("Weight") {|e| e.weight}
         column("Body Fat") {|e| e.bodyfat}
         column("Muscle Mass") {|e| e.muscle_mass}
         column("Heart Rate") {|e| e.heartrate}
+        column("Withings Key") {|e| e.foreign_key}
       end
     end
   end
@@ -82,5 +100,53 @@ ActiveAdmin.register Patient do
       end
     end
     f.actions
+  end
+
+
+  member_action :link_to_withings, method: :get do
+    patient = Patient.find(params[:id])
+    client = withings_client()
+    request_token = client.request_token({oauth_callback: withings_connect_admin_patient_url(patient)})
+    auth_url = client.authorize_url(request_token.token, request_token.secret)
+    patient.withings_oauth_token = request_token.token
+    patient.withings_oauth_secret = request_token.secret
+    patient.save
+    redirect_to auth_url
+  end
+  member_action :withings_connect, method: :get do
+    patient = Patient.find(params[:id])
+    patient.withings_user_id = params[:userid]
+    client = withings_client()
+    access_token = client.access_token(patient.withings_oauth_token, patient.withings_oauth_secret, {oauth_verifier: params[:oauth_verifier]})
+    patient.withings_oauth_token = access_token.token
+    patient.withings_oauth_secret = access_token.secret
+    patient.save
+    redirect_to admin_patient_path(patient), {notice: "Successfully Linked to Withings"}
+  end
+
+  member_action :refresh_withings_entries, method: :get do
+    patient = Patient.find(params[:id])
+    client = withings_client({token: patient.withings_oauth_token, secret:patient.withings_oauth_secret})
+    start_date = patient.most_recent_health_entry.try(:recorded_at) || 1.year.ago
+    end_date = DateTime.now
+    measures = client.body_measurements(patient.withings_user_id, {startdate: start_date, enddate: end_date })
+
+    grouped = measures.group_by {|group_measurement| group_measurement.date}
+    ## doing this because Pulse comes separate from other measurments
+
+    grouped.values.each do |group_array|
+      he = patient.health_entries.new
+      group_array.each do |group| #shouldnt overright data because each group only has select info
+        he.weight ||= group.weight
+        he.bodyfat ||= group.fat_ratio
+        he.muscle_mass ||= group.fat_free_mass
+        he.heartrate ||= group.pulse
+        he.recorded_at ||= Time.at(group.date).to_datetime
+        he.foreign_key ||= group.grpid
+        puts "Entry for group #{group.grpid} weight:#{group.weight} bf: #{group.fat_ratio} mm: #{group.fat_free_mass}"
+      end
+      he.save
+    end
+    redirect_to admin_patient_path(patient), {notice: "Updated Health Enties from Withings"}
   end
 end
