@@ -60,12 +60,12 @@ ActiveAdmin.register Patient do
 
     panel "Health Entries" do
       text_node link_to "Refresh Entries", refresh_withings_entries_admin_patient_path(patient)
-      table_for(patient.health_entries) do
+      table_for(patient.health_entries.limit(10)) do
         column("Date Added") {|e| e.created_at}
         column("Date Recorded") {|e| e.recorded_at}
-        column("Weight") {|e| e.weight}
-        column("Body Fat") {|e| e.bodyfat}
-        column("Muscle Mass") {|e| e.muscle_mass}
+        column("Weight") {|e| e.display_weight}
+        column("Body Fat %") {|e| e.bodyfat}
+        column("Muscle Mass") {|e| e.display_muscle_mass}
         column("Heart Rate") {|e| e.heartrate}
         column("Withings Key") {|e| e.foreign_key}
       end
@@ -91,7 +91,7 @@ ActiveAdmin.register Patient do
     end
 
     f.inputs "Health Entries" do
-      f.has_many :health_entries, heading: false, allow_destroy: true do |e|
+      f.has_many :recent_health_entries, heading: false, allow_destroy: true do |e|
         e.label :created_at
         e.input :weight
         e.input :bodyfat

@@ -19,6 +19,7 @@ class HealthEntry < ApplicationRecord
       where("drs.physician_id = ?", physician.id)
   end
 
+
   def respond_with_dosage(dosage_response)
     phone_service.send_message(self.patient.phone_number,
       "New Dosage from #{dosage_response.physician}: #{dosage_response.medicine} #{dosage_response.dosage}")
@@ -31,5 +32,17 @@ class HealthEntry < ApplicationRecord
 
   def phone_service
     @phone_service = PhoneService.new
+  end
+
+  def display_weight
+    "#{weight.round(2)}kg (#{in_lbs(weight).round(2)}lbs)"
+  end
+
+  def display_muscle_mass
+    "#{muscle_mass.round(2)}kg (#{in_lbs(muscle_mass).round(2)}lbs)"
+  end
+
+  def in_lbs(mass)
+    mass * 2.20462
   end
 end

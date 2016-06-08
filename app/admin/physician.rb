@@ -1,6 +1,7 @@
 ActiveAdmin.register Physician do
   menu priority: 3, label: "Physicians"
-  permit_params :first_name, :last_name, :email, :phone
+  permit_params :first_name, :last_name, :email, :phone,
+                :password, :password_confirmation
 
   index do
     selectable_column
@@ -9,6 +10,7 @@ ActiveAdmin.register Physician do
     column :last_name
     column :email
     column :phone
+    column :last_sign_in_at
 
     column :created_at
     actions
@@ -20,6 +22,7 @@ ActiveAdmin.register Physician do
       row :last_name
       row :email
       row :phone
+      row :last_sign_in_at
       row :created_at
       row :updated_at
     end
@@ -31,6 +34,8 @@ ActiveAdmin.register Physician do
       f.input :last_name
       f.input :email
       f.input :phone
+      f.input :password
+      f.input :password_confirmation
     end
     f.actions
   end

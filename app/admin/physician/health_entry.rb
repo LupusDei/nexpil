@@ -22,9 +22,9 @@ ActiveAdmin.register HealthEntry, namespace: :portal do
       text_node link_to(entry.patient.to_s, portal_patient_path(entry.patient))
     end
 
-    column :weight
-    column :bodyfat
-    column :muscle_mass
+    column "Weight" do |e| e.display_weight end
+    column "Body Fat %" do |e| e.bodyfat end
+    column "Muscle Mass" do |e| e.display_muscle_mass end
     column :heartrate
 
     column :recorded_at
@@ -40,32 +40,32 @@ ActiveAdmin.register HealthEntry, namespace: :portal do
       row :dosage_response
 
       if entry.previous.nil?
-        row :weight
-        row :bodyfat
-        row :muscle_mass
+        row "Weight"  do |e| e.display_weight end
+        row "Body Fat %" do |e| e.bodyfat end
+        row "Muscle Mass" do |e| e.display_muscle_mass end
         row :heartrate
-        row :created_at
+        row "Date Recorded" do |e| e.recorded_at end
       else
         row("Weight") do
-          text_node entry.weight
-          p "  <-  (#{entry.previous.weight})"
+          text_node entry.display_weight
+          p "  <-  (#{entry.previous.display_weight})"
         end
         row("Body Fat") do
           text_node entry.bodyfat
           p "  <-  (#{entry.previous.bodyfat})"
         end
         row("Muscle Mass") do
-          text_node entry.muscle_mass
-          p "  <-  (#{entry.previous.muscle_mass})"
+          text_node entry.display_muscle_mass
+          p "  <-  (#{entry.previous.display_muscle_mass})"
         end
         row("Heart Rate") do
           text_node entry.heartrate
           p "  <-  (#{entry.previous.heartrate})"
         end
 
-        row("Created At") do
-          text_node entry.created_at
-          p " __ (#{distance_of_time_in_words(entry.previous.created_at, entry.created_at)} since last entry)"
+        row("Date Recorded") do
+          text_node entry.recorded_at
+          p " __ (#{distance_of_time_in_words(entry.previous.recorded_at, entry.recorded_at)} since last entry)"
         end
 
         row("Previous Response") do
