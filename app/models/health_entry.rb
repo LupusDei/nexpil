@@ -1,6 +1,7 @@
 class HealthEntry < ApplicationRecord
   belongs_to :patient
   has_many :dosage_responses
+  has_one :dosage_response, -> { order(created_at: :desc) }
 
   validates_uniqueness_of :foreign_key
   validates_presence_of :weight, :bodyfat, :heartrate, :muscle_mass

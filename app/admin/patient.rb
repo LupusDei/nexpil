@@ -1,7 +1,7 @@
 ActiveAdmin.register Patient do
   menu priority: 1, label: "Patients"
   permit_params :first_name, :last_name, :email,
-               :age, :gender, :medical_history,
+               :age, :gender, :medical_history, :phone_number,
 
   perscriptions_attributes: [:id, :medicine, :dosage, :patient_id, :_destroy],
   health_entries_attributes: [:id, :weight, :bodyfat, :muscle_mass, :heartrate, :patient_id, :_destroy]

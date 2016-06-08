@@ -94,6 +94,7 @@ ActiveAdmin.register HealthEntry, namespace: :portal do
     dr_params = params[:dosage_response].permit(:medicine, :dosage)
     dr = DosageResponse.create(dr_params.merge(physician_id: current_physician.id,
      patient_id: entry.patient_id, health_entry_id: entry.id))
+    entry.respond_with_dosage(dr)
     redirect_to(portal_health_entry_path(entry), {notice: "Responded with new dosage!"})
   end
 
