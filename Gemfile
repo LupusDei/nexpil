@@ -25,14 +25,22 @@ gem 'jbuilder', '~> 2.0'
 
 gem 'twilio-ruby'
 
-gem 'rails_12factor', group: :production
 gem 'activeadmin', github: 'activeadmin'
-gem 'devise', '~> 4.x'
+gem 'devise',      '> 4.x'
+gem 'ransack',    github: 'activerecord-hackery/ransack'
+gem 'kaminari',   github: 'amatsuda/kaminari', branch: '0-17-stable'
+gem 'formtastic', github: 'justinfrench/formtastic'
+gem 'draper',     github: 'audionerd/draper', branch: 'rails5', ref: 'e816e0e587'
+gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
+
+gem 'rails_12factor', group: :production
+
 gem 'withings-sdk'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'mocha'
+  gem 'rspec-rails', '>= 3.5.0.beta1'
 end
 
 group :development do
