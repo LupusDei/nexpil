@@ -3,7 +3,7 @@ class HealthEntry < ApplicationRecord
   has_many :dosage_responses
   has_one :dosage_response, -> { order(created_at: :desc) }
 
-  validates_uniqueness_of :foreign_key
+  validates_uniqueness_of :foreign_key, allow_nil: true
   validates_presence_of :weight, :bodyfat, :heartrate, :muscle_mass
   attr_accessor :phone_service
 

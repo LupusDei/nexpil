@@ -20,6 +20,7 @@ ActiveAdmin.register DosageResponse, namespace: :portal do
     end
     column :medicine
     column :dosage
+    column :patient
 
     column :created_at
     actions

@@ -2,6 +2,7 @@ ActiveAdmin.register Patient do
   menu priority: 1, label: "Patients"
   permit_params :first_name, :last_name, :email,
                :age, :gender, :medical_history, :phone_number,
+               :withings_user_id, :withings_oauth_secret, :withings_oauth_token,
 
   perscriptions_attributes: [:id, :medicine, :dosage, :patient_id, :_destroy],
   health_entries_attributes: [:id, :weight, :bodyfat, :muscle_mass, :heartrate, :patient_id, :_destroy]
@@ -40,7 +41,7 @@ ActiveAdmin.register Patient do
       row :gender
       row :medical_history
       row 'Withings' do |patient|
-        if patient.withings_user_id != nil
+        if patient.withings_user_id != nil && patient.withings_user_id != ""
           text_node "Connected!"
         else
           text_node link_to("Connect to Withings", link_to_withings_admin_patient_path(patient))
@@ -65,7 +66,7 @@ ActiveAdmin.register Patient do
         column("Date Recorded") {|e| e.recorded_at}
         column("Weight") {|e| e.display_weight}
         column("Body Fat %") {|e| e.bodyfat}
-        column("Muscle Mass") {|e| e.display_muscle_mass}
+        column("Non Fat Mass") {|e| e.display_muscle_mass}
         column("Heart Rate") {|e| e.heartrate}
         column("Withings Key") {|e| e.foreign_key}
       end
@@ -81,6 +82,9 @@ ActiveAdmin.register Patient do
       f.input :age
       f.input :gender
       f.input :medical_history
+      f.input :withings_user_id
+      f.input :withings_oauth_token
+      f.input :withings_oauth_secret
     end
 
     f.inputs "Prescriptions" do
@@ -91,7 +95,7 @@ ActiveAdmin.register Patient do
     end
 
     f.inputs "Health Entries" do
-      f.has_many :recent_health_entries, heading: false, allow_destroy: true do |e|
+      f.has_many :health_entries, heading: false, allow_destroy: true do |e|
         e.label :created_at
         e.input :weight
         e.input :bodyfat
